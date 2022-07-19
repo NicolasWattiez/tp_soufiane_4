@@ -1,0 +1,60 @@
+version: "3.7"
+services:
+  master:
+    links:
+      - server1
+      - server2
+    image: ubuntu:20.04
+    container_name: master01
+    hostname: master01
+    stdin_open: true
+    tty: true
+    command : >
+      bash -c "apt update && apt upgrade -y
+      && DEBIAN_FRONTED=noninteractive
+      && apt install -y apt --no-install-recommends ansible openssh-server
+      && ssh-keyscan server1 >> /root/.ssh/known_hosts
+      && ssh-keyscan server2 >> /root/.ssh/known_hosts
+      && bash"
+    volumes:
+      - ansible_vol:/var/ans
+      - ./ssh/id_rsa:/root/.ssh/id_rsa
+
+  server1:
+    image: myserver
+    container_name: server1
+    hostname: server1
+    stdin_open: true
+    tty: true
+    command : >
+      bash -c "cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+      && /usr/sbin/sshd -D"
+    expose:
+      - 22
+    ports:
+      - 8042:8080
+      - 8043:80
+    volumes:
+     - ansible_vol:/var/ans
+     - ./ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
+
+  server2:
+    image: myserver
+    container_name: server2
+    hostname: server2
+    stdin_open: true
+    tty: true
+    command : >
+      bash -c "cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+      && /usr/sbin/sshd -D"
+    expose:
+      - 22
+    ports:
+      - 8052:8080
+      - 8053:80
+    volumes:
+     - ansible_vol:/var/ans
+     - ./ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
+
+volumes:
+  ansible_vol:

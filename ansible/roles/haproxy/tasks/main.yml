@@ -1,0 +1,8 @@
+- name: Install haproxy
+  ansible.builtin.apt:
+    name: haproxy
+    state: present
+# - name: upload haproxy config source
+#   copy:
+#     src: "{{ role_path }}/files/haproxy.cfg"
+#     dest: /etc/haproxy/haproxy.cfg

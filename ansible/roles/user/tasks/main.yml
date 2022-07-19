@@ -1,0 +1,14 @@
+- name: Create users
+  ansible.builtin.user:
+    name: "{{ item }}"
+  with_items: 
+    - 'Jean'
+    - Paul
+- name: Create folders
+  file:
+    path: /tmp/{{ item }}
+    state: directory
+  with_items:
+    - 'folder1'
+    - 'folder2'
+    - 'folder3'
