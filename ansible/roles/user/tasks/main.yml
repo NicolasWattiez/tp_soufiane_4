@@ -2,7 +2,7 @@
   ansible.builtin.user:
     name: "{{ item }}"
   with_items: 
-    - 'Jean'
+    - Jean
     - Paul
 - name: Create folders
   file:

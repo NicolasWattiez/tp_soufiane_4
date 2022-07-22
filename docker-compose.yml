@@ -28,6 +28,8 @@ services:
     tty: true
     command : >
       bash -c "cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+      && DEBIAN_FRONTED=noninteractive
+      && apt install iproute2 -y
       && /usr/sbin/sshd -D"
     expose:
       - 22
@@ -46,6 +48,8 @@ services:
     tty: true
     command : >
       bash -c "cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+      && DEBIAN_FRONTED=noninteractive
+      && apt install iproute2 -y
       && /usr/sbin/sshd -D"
     expose:
       - 22
